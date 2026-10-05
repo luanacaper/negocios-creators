@@ -118,7 +118,7 @@ a{color:inherit}
 
 <script>
 /* Para acrescentar um link: ache o negócio abaixo e inclua uma linha { t, u, k }.
-   k = painel | criadores | lp | trafego | calendario | site | ferramenta. priv: true = pede login / só você vê. */
+   k = painel | criadores | lp | trafego | calendario | site | ferramenta. priv: true = pede login / só você vê. h = texto curto no lugar do endereço. */
 const NEGOCIOS = [
   { id: "luana", nome: "Luana Caper Creators", cor: "#E2762F", sobre: "Portfólio UGC, marca pessoal @luhcaper e marcas parceiras", links: [
     { t: "Portfólio UGC", u: "https://luanacaper.github.io/portfolio-ugc/", k: "site" },
@@ -155,7 +155,8 @@ const NEGOCIOS = [
   { id: "hfcred", nome: "HF Créditos", cor: "#B8892B", sobre: "Precatórios e RPV", links: [
     { t: "Site", u: "https://hfcreditos.com.br", k: "site" },
     { t: "LP Precatório e RPV", u: "https://hfcreditos.com.br/lp-precatorio-rpv-v2", k: "lp" },
-    { t: "Métricas Gerenciador de anúncio (hoje)", u: "https://adsmanager.facebook.com/adsmanager/manage/adsets?act=748144001343797&business_id=2656914047882316&column_preset=28648437624775394&date=2026-07-09_2026-07-10%2Ctoday&insights_date=2026-07-09_2026-07-10%2Ctoday&nav_source=flyout_menu&treenav=true", k: "trafego", priv: true },
+    { t: "Métricas Gerenciador de anúncio (hoje)", u: "https://adsmanager.facebook.com/adsmanager/manage/adsets?act=748144001343797&business_id=2656914047882316&column_preset=28648437624775394&date=2026-07-09_2026-07-10%2Ctoday&insights_date=2026-07-09_2026-07-10%2Ctoday&nav_source=flyout_menu&treenav=true", k: "trafego", priv: true, h: "Meta Ads · hoje" },
+    { t: "Pagamento da conta de anúncios", u: "https://adsmanager.facebook.com/adsmanager/billing_hub/accounts/details?nav_entry_point=ads_ecosystem_navigation_menu&placement=ads_manager&asset_id=748144001343797&business_id=2656914047882316&payment_account_id=748144001343797", k: "trafego", priv: true, h: "Meta Ads · cobrança" },
     { t: "Painel HF Créditos", u: "https://claude.ai/artifact/7eXcaUxdsDbDiUzzz5Kdxw", k: "painel", priv: true },
     { t: "Diagnóstico HF Créditos", u: "https://claude.ai/artifact/WKmyEk4ojieHonr8m2hV39", k: "painel", priv: true }
   ]},
@@ -197,7 +198,7 @@ function desenhar() {
       <div class="neg-cab"><h2><i></i>${esc(n.nome)}</h2><p>${esc(n.sobre)}</p></div>
       <div class="grade">${itens.map(l => `<a class="link" href="${esc(l.u)}" target="_blank" rel="noopener">
         <b>${esc(l.t)}</b><span class="seta">${SETA}</span>
-        <small><span class="tipo${l.priv ? " privado" : ""}">${ROTULO[l.k]}</span><code>${esc(l.k === "trafego" ? "Meta Ads · hoje" : host(l.u))}</code></small></a>`).join("")}</div>
+        <small><span class="tipo${l.priv ? " privado" : ""}">${ROTULO[l.k]}</span><code>${esc(l.h || host(l.u))}</code></small></a>`).join("")}</div>
     </section>`;
   }).join("");
   $("lista").innerHTML = html || `<p class="vazio">Nada encontrado com esse filtro. Tente outra palavra ou volte pra “Tudo”.</p>`;
