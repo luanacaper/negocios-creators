@@ -31,7 +31,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);l
 h1,h2,h3,p{margin:0}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:10px}
-.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 56px;display:grid;gap:22px}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 56px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+.wrap>*{min-width:0}
 
 /* Cabeçalho */
 .topo{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
@@ -50,7 +51,7 @@ a{color:inherit}
 .busca input{width:100%;padding:11px 16px 11px 40px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600}
 .busca input:focus{outline:none;border-color:var(--ink)}
 .busca svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2.2}
-.filtros{display:flex;gap:6px;overflow-x:auto;max-width:100%;padding-bottom:2px}
+.filtros{display:flex;gap:6px;overflow-x:auto;flex:1 1 100%;min-width:0;max-width:100%;padding-bottom:2px;-webkit-overflow-scrolling:touch}
 .filtro{flex:none;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
 .filtro[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .filtro span{font-family:var(--mono);font-weight:500;opacity:.6;margin-left:4px;font-size:.78rem}
@@ -107,7 +108,7 @@ a{color:inherit}
   </div>
 
   <nav class="indice" id="indice" aria-label="Negócios"></nav>
-  <main id="lista" style="display:grid;gap:30px"></main>
+  <main id="lista" style="display:grid;grid-template-columns:minmax(0,1fr);gap:30px"></main>
 
   <footer class="rodape">
     <span id="contagem"></span>
