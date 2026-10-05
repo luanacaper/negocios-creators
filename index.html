@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#121316">
+<link rel="icon" type="image/png" sizes="32x32" href="marca/nc-icone-32.png">
+<link rel="icon" type="image/svg+xml" href="marca/nc-icone.svg">
+<link rel="apple-touch-icon" href="marca/nc-icone-180.png">
+<title>Negócios Creators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: cabeçalho com a marca nc + busca/filtros em pílula; cada negócio é um bloco com a cor da marca e uma grade de atalhos. */
+:root{
+  --bg:#F5F5F1; --surface:#FFFFFF; --ink:#15171A; --muted:#5A5E57; --line:#E4E4DC;
+  --mint:#14A37E; --orange:#D9692A; --spark:#FFF3E6; --chip:#EEEEE6;
+  --display:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1013; --surface:#17181C; --ink:#EEEFEA; --muted:#9A9E96; --line:#2A2C31;
+  --mint:#3EDDB0; --orange:#FF8F4A; --spark:#FFF3E6; --chip:#22242A; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0F1013; --surface:#17181C; --ink:#EEEFEA; --muted:#9A9E96; --line:#2A2C31;
+  --mint:#3EDDB0; --orange:#FF8F4A; --spark:#FFF3E6; --chip:#22242A; color-scheme:dark }
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:10px}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 56px;display:grid;gap:22px}
+
+/* Cabeçalho */
+.topo{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.selo{width:76px;height:76px;border-radius:20px;background:#121316;display:grid;place-items:center;box-shadow:0 14px 34px rgba(17,18,21,.22);overflow:hidden;position:relative}
+.selo::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 120% at 100% 100%,rgba(255,143,74,.30),transparent 55%),radial-gradient(90% 90% at 0 0,rgba(62,221,176,.12),transparent 60%)}
+.selo svg{width:52px;position:relative;z-index:1}
+.nome{display:grid;gap:2px;min-width:0}
+.nome .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.nome h1{font-size:clamp(1.5rem,4.2vw,2.2rem);font-weight:800;letter-spacing:-.035em;line-height:1.05;text-wrap:balance}
+.nome h1 .c{color:var(--orange)}
+.nome p{color:var(--muted);font-size:.95rem}
+
+/* Barra de busca e filtros */
+.ferramentas{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;margin-block:-10px}
+.busca{flex:1 1 240px;min-width:0;position:relative}
+.busca input{width:100%;padding:11px 16px 11px 40px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600}
+.busca input:focus{outline:none;border-color:var(--ink)}
+.busca svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2.2}
+.filtros{display:flex;gap:6px;overflow-x:auto;max-width:100%;padding-bottom:2px}
+.filtro{flex:none;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
+.filtro[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.filtro span{font-family:var(--mono);font-weight:500;opacity:.6;margin-left:4px;font-size:.78rem}
+
+/* Atalhos por negócio */
+.indice{display:flex;flex-wrap:wrap;gap:6px}
+.indice a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:700;font-size:.85rem;padding:6px 12px 6px 8px;border-radius:999px;background:var(--chip)}
+.indice a i{width:10px;height:10px;border-radius:50%;background:var(--cor)}
+
+.negocio{display:grid;gap:12px;scroll-margin-top:84px}
+.neg-cab{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+.neg-cab h2{display:flex;align-items:center;gap:10px;font-size:1.25rem;font-weight:800;letter-spacing:-.025em}
+.neg-cab h2 i{width:14px;height:14px;border-radius:50%;background:var(--cor);box-shadow:0 0 0 4px color-mix(in srgb,var(--cor) 22%,transparent)}
+.neg-cab p{color:var(--muted);font-size:.88rem;min-width:0}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.link{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:start;text-decoration:none;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:13px 14px 12px;transition:border-color .15s,transform .15s}
+.link:hover{border-color:var(--cor);transform:translateY(-1px)}
+.link b{font-size:.98rem;font-weight:800;letter-spacing:-.01em;min-width:0;overflow-wrap:anywhere}
+.link .seta{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--chip);grid-row:span 2}
+.link .seta svg{width:13px;height:13px;stroke:var(--ink);fill:none;stroke-width:2.4}
+.link:hover .seta{background:var(--cor)}
+.link:hover .seta svg{stroke:#fff}
+.link small{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--muted);font-size:.78rem;min-width:0}
+.link small code{font-family:var(--mono);font-size:.74rem;overflow-wrap:anywhere;min-width:0}
+.tipo{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--ink)}
+.tipo.privado::before{content:"🔒 ";font-size:.62rem}
+.vazio{padding:28px 16px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:18px}
+.rodape{color:var(--muted);font-size:.8rem;display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:520px){.selo{width:60px;height:60px;border-radius:16px}.selo svg{width:42px}}
+@media (prefers-reduced-motion:reduce){.link{transition:none}.link:hover{transform:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topo">
+    <div class="selo" aria-hidden="true">
+      <svg viewBox="0 -1082 3389 1084"><defs><clipPath id="nc-c1"><circle cx="2768" cy="-270" r="270"/></clipPath></defs><path fill="#F4F5F2" d="M876 0V-510Q876 -547 872.0 -604.5Q868 -662 847.0 -720.0Q826 -778 778.5 -817.0Q731 -856 644 -856Q609 -856 569.0 -845.0Q529 -834 494.0 -802.5Q459 -771 436.5 -710.0Q414 -649 414 -548L258 -622Q258 -750 310.0 -862.0Q362 -974 466.5 -1043.0Q571 -1112 730 -1112Q857 -1112 937.0 -1069.0Q1017 -1026 1061.5 -960.0Q1106 -894 1125.0 -822.5Q1144 -751 1148.0 -692.0Q1152 -633 1152 -606V0ZM138 0V-1080H380V-722H414V0Z M1808.0 30Q1640.0 30 1520.0 -45.0Q1400.0 -120 1336.0 -249.0Q1272.0 -378 1272.0 -540Q1272.0 -704 1338.5 -833.0Q1405.0 -962 1526.0 -1036.0Q1647.0 -1110 1812.0 -1110Q2003.0 -1110 2132.5 -1013.5Q2262.0 -917 2298.0 -750L2026.0 -678Q2002.0 -762 1942.5 -809.0Q1883.0 -856 1808.0 -856Q1722.0 -856 1667.0 -814.5Q1612.0 -773 1586.0 -701.5Q1560.0 -630 1560.0 -540Q1560.0 -399 1622.5 -311.5Q1685.0 -224 1808.0 -224Q1900.0 -224 1948.0 -266.0Q1996.0 -308 2020.0 -386L2298.0 -328Q2252.0 -156 2124.0 -63.0Q1996.0 30 1808.0 30Z"/><circle cx="2768" cy="-270" r="270" fill="#3EDDB0"/><circle cx="3119" cy="-270" r="270" fill="#FF8F4A"/><circle cx="3119" cy="-270" r="270" fill="#FFF3E6" clip-path="url(#nc-c1)"/></svg>
+    </div>
+    <div class="nome">
+      <span class="eyebrow">Ecossistema Luana Caper</span>
+      <h1>Negócios <span class="c">Creators</span></h1>
+      <p>Todos os painéis, páginas e ferramentas das marcas e criadores num lugar só.</p>
+    </div>
+  </header>
+
+  <div class="ferramentas">
+    <label class="busca" for="q">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <span class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Buscar</span>
+      <input id="q" type="search" placeholder="Buscar: criadores, LP, calendário, Aimê…" autocomplete="off">
+    </label>
+    <div class="filtros" id="filtros" role="group" aria-label="Filtrar por tipo"></div>
+  </div>
+
+  <nav class="indice" id="indice" aria-label="Negócios"></nav>
+  <main id="lista" style="display:grid;gap:30px"></main>
+
+  <footer class="rodape">
+    <span id="contagem"></span>
+    <span>🔒 = pede login ou é visível só pra você</span>
+  </footer>
+</div>
+
+<script>
+/* Para acrescentar um link: ache o negócio abaixo e inclua uma linha { t, u, k }.
+   k = painel | criadores | lp | calendario | site | ferramenta. priv: true = pede login / só você vê. */
+const NEGOCIOS = [
+  { id: "luana", nome: "Luana Caper Creators", cor: "#E2762F", sobre: "Portfólio UGC, marca pessoal @luhcaper e marcas parceiras", links: [
+    { t: "Portfólio UGC", u: "https://luanacaper.github.io/portfolio-ugc/", k: "site" },
+    { t: "Painel do portfólio", u: "https://luanacaper.github.io/portfolio-ugc/login/", k: "painel", priv: true, d: "Vídeos, marcas, métricas, calendário e campanhas" },
+    { t: "Bio link @luhcaper", u: "https://pousadaaime.github.io/luhcaper/", k: "site" },
+    { t: "Instagram @luhcaper", u: "https://www.instagram.com/luhcaper", k: "site" }
+  ]},
+  { id: "aime", nome: "Pousada Aimê", cor: "#48B29A", sobre: "Hospedagem, aniversários e agências", links: [
+    { t: "Painel Aimê", u: "https://claude.ai/artifact/UURBig6bJT4y9FAcJEeEDq", k: "painel", priv: true },
+    { t: "Calendário de outubro", u: "https://pousadaaime.github.io/calendario/2026-10.html", k: "calendario" },
+    { t: "Painel de criadores", u: "https://pousadaaime.github.io/aime-criadores/painel-criadores.html", k: "criadores", priv: true },
+    { t: "Inscrição de criadores", u: "https://pousadaaime.github.io/aime-criadores/", k: "criadores" },
+    { t: "Termo de criadores", u: "https://pousadaaime.github.io/aime-criadores/termo.html", k: "criadores" },
+    { t: "LP Hospedagem", u: "https://pousadaaime.github.io/aime-lp-hospedagem/", k: "lp" },
+    { t: "LP Aniversários", u: "https://pousadaaime.github.io/aime-lp-aniversario/", k: "lp" },
+    { t: "LP Agências", u: "https://pousadaaime.github.io/aime-lp-agencia/", k: "lp" },
+    { t: "Painel de reservas", u: "https://clientes-aime.netlify.app/", k: "painel", priv: true }
+  ]},
+  { id: "fast", nome: "Fast Escova", cor: "#D9467A", sobre: "Unidade Bauru: creators locais e cupom", links: [
+    { t: "Calendário", u: "https://fastescovabauru.github.io/calendario/", k: "calendario" },
+    { t: "Calendário de outubro", u: "https://fastescovabauru.github.io/calendario/2026-10.html", k: "calendario" },
+    { t: "Painel de criadores", u: "https://fastescovabauru.github.io/criadores/painelcriadores.html", k: "criadores", priv: true },
+    { t: "Inscrição de criadores", u: "https://fastescovabauru.github.io/criadores/", k: "criadores" },
+    { t: "Termo de criadores", u: "https://fastescovabauru.github.io/criadores/termo.html", k: "criadores" },
+    { t: "LP Cupom Bauru", u: "https://fastescovabauru.github.io/cupom/", k: "lp" },
+    { t: "Admin do cupom", u: "https://fastescovabauru.github.io/cupom/admin.html", k: "painel", priv: true },
+    { t: "Importar vendas", u: "https://fastescovabauru.github.io/cupom/importar-vendas.html", k: "ferramenta", priv: true },
+    { t: "Dashboard Fast Escova", u: "https://claude.ai/artifact/WfEhAWMf2GAFL61atd1fCQ", k: "painel", priv: true }
+  ]},
+  { id: "hfcon", nome: "HF Consultoria", cor: "#2F5D9E", sobre: "Contabilidade e restituição previdenciária", links: [
+    { t: "Site", u: "https://hfconsultoriacontabil.com.br", k: "site" },
+    { t: "LP Restituição previdenciária", u: "https://hfconsultoriacontabil.com.br/restituicao-previdenciaria", k: "lp" }
+  ]},
+  { id: "hfcred", nome: "HF Créditos", cor: "#B8892B", sobre: "Precatórios e RPV", links: [
+    { t: "Site", u: "https://hfcreditos.com.br", k: "site" },
+    { t: "LP Precatório e RPV", u: "https://hfcreditos.com.br/lp-precatorio-rpv-v2", k: "lp" },
+    { t: "Painel HF Créditos", u: "https://claude.ai/artifact/7eXcaUxdsDbDiUzzz5Kdxw", k: "painel", priv: true },
+    { t: "Diagnóstico HF Créditos", u: "https://claude.ai/artifact/WKmyEk4ojieHonr8m2hV39", k: "painel", priv: true }
+  ]},
+  { id: "voo", nome: "Indeniza Voo", cor: "#3B8FD6", sobre: "Stabille e Pessoa Advogados", links: [
+    { t: "Site Stabille e Pessoa", u: "https://sepadv.com.br", k: "site" },
+    { t: "Política de privacidade", u: "https://claude.ai/artifact/4JeB5UE1ZZmx8Ecz5GhJXR", k: "site" }
+  ]},
+  { id: "fin", nome: "Meu Financeiro", cor: "#1FB88F", sobre: "Contas da casa e do negócio", links: [
+    { t: "App Meu Financeiro", u: "https://luanacaper.github.io/meu-financeiro/", k: "painel", priv: true },
+    { t: "Raio-X Financeiro", u: "https://claude.ai/artifact/AdX8Fg38198DDi8bGEqcsk", k: "painel", priv: true }
+  ]}
+];
+const TIPOS = { todos: "Tudo", painel: "Painéis", criadores: "Criadores", lp: "LPs", calendario: "Calendários", site: "Sites", ferramenta: "Ferramentas" };
+const ROTULO = { painel: "Painel", criadores: "Criadores", lp: "LP", calendario: "Calendário", site: "Site", ferramenta: "Ferramenta" };
+
+let filtro = "todos";
+try { const f = localStorage.getItem("nc-filtro"); if (f && TIPOS[f]) filtro = f; } catch (e) {}
+const $ = id => document.getElementById(id);
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const host = u => u.replace(/^https?:\/\//, "").replace(/\/$/, "");
+const SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+
+function desenharFiltros() {
+  const cont = { todos: 0 };
+  NEGOCIOS.forEach(n => n.links.forEach(l => { cont.todos++; cont[l.k] = (cont[l.k] || 0) + 1; }));
+  $("filtros").innerHTML = Object.keys(TIPOS).filter(k => cont[k]).map(k =>
+    `<button class="filtro" type="button" data-k="${k}" aria-pressed="${filtro === k}">${TIPOS[k]}<span>${cont[k]}</span></button>`).join("");
+}
+function desenhar() {
+  const q = norm($("q").value.trim());
+  let total = 0, negs = 0;
+  const html = NEGOCIOS.map(n => {
+    const itens = n.links.filter(l => (filtro === "todos" || l.k === filtro) &&
+      (!q || norm(n.nome + " " + l.t + " " + (l.d || "") + " " + ROTULO[l.k] + " " + l.u).includes(q)));
+    if (!itens.length) return "";
+    total += itens.length; negs++;
+    return `<section class="negocio" id="${n.id}" style="--cor:${n.cor}">
+      <div class="neg-cab"><h2><i></i>${esc(n.nome)}</h2><p>${esc(n.sobre)}</p></div>
+      <div class="grade">${itens.map(l => `<a class="link" href="${esc(l.u)}" target="_blank" rel="noopener">
+        <b>${esc(l.t)}</b><span class="seta">${SETA}</span>
+        <small><span class="tipo${l.priv ? " privado" : ""}">${ROTULO[l.k]}</span><code>${esc(host(l.u))}</code></small></a>`).join("")}</div>
+    </section>`;
+  }).join("");
+  $("lista").innerHTML = html || `<p class="vazio">Nada encontrado com esse filtro. Tente outra palavra ou volte pra “Tudo”.</p>`;
+  $("indice").innerHTML = NEGOCIOS.map(n => `<a href="#${n.id}" style="--cor:${n.cor}"><i></i>${esc(n.nome)}</a>`).join("");
+  $("contagem").textContent = `${negs} ${negs === 1 ? "negócio" : "negócios"} · ${total} ${total === 1 ? "link" : "links"}`;
+}
+$("filtros").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  filtro = b.dataset.k;
+  try { localStorage.setItem("nc-filtro", filtro); } catch (err) {}
+  desenharFiltros(); desenhar();
+});
+$("q").addEventListener("input", desenhar);
+desenharFiltros(); desenhar();
+</script>
+
+</body>
+</html>
