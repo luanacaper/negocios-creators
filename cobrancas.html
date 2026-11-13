@@ -180,7 +180,9 @@ function statusDoMes(c) {
 function desenhar(aviso) {
   document.getElementById("b-sair").hidden = false;
   document.getElementById("b-atualizar").hidden = false;
-  const cs = estado.clientes;
+  const cs = estado.clientes.filter(c => !c.arquivado);
+  const arq = estado.clientes.filter(c => c.arquivado);
+  const pct = c => String(Math.round(c.pct_invest * 1000) / 10).replace(".", ",") + "%";
   app.innerHTML = `
   <div style="display:grid;gap:22px">
     ${aviso ? `<div class="aviso ${aviso.tipo}" role="status">${esc(aviso.txt)}</div>` : ""}
@@ -191,18 +193,23 @@ function desenhar(aviso) {
         <article class="cartao cli">
           <div class="cli-cab"><div><h3>${esc(c.cliente)}</h3><small>${esc(c.para)}${c.cc ? " · cc " + esc(c.cc) : ""}</small></div>${statusDoMes(c)}</div>
           <div class="dados">
-            <div><span>Valor</span><b>${brl(c.valor)}</b></div>
+            <div><span>Valor</span><b>${brl(c.valor)}</b>${c.pct_invest ? `<small style="color:var(--muted);font-size:.75rem">${brl(c.valor_fixo)} + ${pct(c)} de ${brl(c.invest_estimado)}</small>` : ""}</div>
             <div><span>Competência</span><b>${esc(c.competencia_atual)}</b></div>
             <div><span>Envio</span><b>dia ${esc(c.dia_envio)}</b></div>
             <div><span>Vencimento</span><b>${c.dia_vencimento ? "dia " + esc(c.dia_vencimento) : "falta"}</b></div>
           </div>
           <p style="font-size:.82rem;color:var(--muted)">${c.proximo ? `Próximo envio automático: <b style="color:var(--ink)">${esc(c.proximo.data)}</b>` : ""}${!c.dia_vencimento ? ` · <b style="color:var(--crit)">Preencha o dia do vencimento na planilha.</b>` : ""}${!c.tem_qr ? ` · sem QR` : ""}</p>
+          ${c.pct_invest ? `<form class="cli-acoes" data-invest="${esc(c.id)}" style="align-items:end"><div class="campo" style="flex:1"><label for="inv-${esc(c.id)}">Investimento em anúncios da competência (R$)</label><input id="inv-${esc(c.id)}" inputmode="decimal" value="${String(c.invest_estimado).replace(".", ",")}"></div><button class="btn mini" type="submit">Salvar</button></form>` : ""}
           <div class="cli-acoes">
             <button class="btn mini" type="button" data-enviar="${esc(c.id)}">Enviar agora</button>
+            <button class="btn mini" type="button" data-arquivar="${esc(c.id)}" title="Cliente encerrado: para de enviar e vai pra Arquivados">Arquivar</button>
             <label class="interruptor"><input type="checkbox" data-ativo="${esc(c.id)}" ${c.ativo ? "checked" : ""}> Automático ligado</label>
           </div>
         </article>`).join("")}</div>
     </section>
+
+    ${arq.length ? `<details class="cartao"><summary><b>Arquivados (${arq.length})</b> <small style="color:var(--muted)">· encerrados, não recebem email. Dá pra reativar.</small></summary>
+      <div style="display:grid;gap:8px;margin-top:10px">${arq.map(c => `<div class="cli-acoes" style="justify-content:space-between"><span><b>${esc(c.cliente)}</b> <small style="color:var(--muted)">${brl(c.valor)} · envio dia ${esc(c.dia_envio)}</small></span><button class="btn mini" type="button" data-reativar="${esc(c.id)}">Reativar</button></div>`).join("")}</div></details>` : ""}
 
     <section class="cartao" style="display:grid;gap:12px">
       <h2>Envio manual</h2>
@@ -244,6 +251,23 @@ function desenhar(aviso) {
     document.getElementById("m-cliente").value = c.id;
     document.getElementById("f-manual").requestSubmit();
     document.getElementById("f-manual").scrollIntoView({ behavior: "smooth", block: "center" });
+  }));
+  const acao = async (corpo, ok, el) => {
+    if (el) el.disabled = true;
+    try { const r = await chamar(corpo); if (!r.ok) throw new Error(r.erro); estado = r; desenhar({ tipo: "ok", txt: ok }); }
+    catch (e) { desenhar({ tipo: "erro", txt: e.message }); }
+  };
+  app.querySelectorAll("[data-arquivar]").forEach(b => b.addEventListener("click", () => {
+    if (b.dataset.conf !== "1") { b.dataset.conf = "1"; b.textContent = "Confirmar arquivar?"; return; }
+    acao({ acao: "arquivar", cliente_id: b.dataset.arquivar, arquivado: true }, "Cliente arquivado: não recebe mais email.", b);
+  }));
+  app.querySelectorAll("[data-reativar]").forEach(b => b.addEventListener("click", () =>
+    acao({ acao: "arquivar", cliente_id: b.dataset.reativar, arquivado: false }, "Cliente de volta na lista. O automático continua desligado: ligue quando quiser.", b)));
+  app.querySelectorAll("[data-invest]").forEach(f => f.addEventListener("submit", ev => {
+    ev.preventDefault();
+    const v = Number(f.querySelector("input").value.replace(/\./g, "").replace(",", "."));
+    if (!(v >= 0)) return desenhar({ tipo: "erro", txt: "Valor do investimento inválido." });
+    acao({ acao: "investimento", cliente_id: f.dataset.invest, valor: v }, "Investimento salvo: valor da cobrança recalculado.", f.querySelector("button"));
   }));
   app.querySelectorAll("[data-ativo]").forEach(i => i.addEventListener("change", async () => {
     i.disabled = true;
